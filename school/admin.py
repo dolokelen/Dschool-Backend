@@ -1,8 +1,5 @@
-from typing import Any
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
-from django.db.models.query import QuerySet
-from django.http.request import HttpRequest
 from . import models
 
 
@@ -30,6 +27,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     inlines = [AddressInline, ContactInline, SupplyItemInline]
     search_fields = ['name']
     autocomplete_fields = ['director', 'deputy_director', 'parent']
+    empty_value_display = 'Not available'
     list_display = ['name', 'director', 'deputy_director', 'budget', 'parent','duty']
 
 
@@ -198,7 +196,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
     search_fields = ['section', 'school_year']
     autocomplete_fields = ['student', 'section', 'semester']
     list_select_related = ['student', 'section', 'semester']
-    list_display = ['student', 'section', 'school_year', 'semester', 'status']
+    list_display = ['student', 'course', 'section', 'school_year', 'semester', 'status']
 
 
 @admin.register(models.Grade)

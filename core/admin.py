@@ -17,6 +17,7 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(QuizExam)
 class QuizExamAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['student', 'course', 'section']
     list_display = ['student', 'course', 'section', 'question', 'selected_choice']
 
     
