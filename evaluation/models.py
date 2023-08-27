@@ -61,10 +61,7 @@ class Respondent(models.Model):
 class QuizExam(models.Model):
     respondent = models.ForeignKey(Respondent, on_delete=models.CASCADE)
     question = models.ForeignKey(QuizQuestion, on_delete=models.PROTECT)
-    selected_choice = models.ForeignKey(Choice, on_delete=models.PROTECT)
-    start_time = models.CharField(max_length=7)
-    end_time = models.CharField(max_length=7)
-    week_days = models.CharField(max_length=7)    
+    selected_choice = models.ForeignKey(Choice, on_delete=models.PROTECT)   
     date = models.DateTimeField(auto_now_add=True)
    
 
@@ -107,10 +104,7 @@ class AppraiserChoice(models.Model):
 
 class AppraiserResponse(models.Model):
     respondent = models.ForeignKey(Respondent, on_delete=models.PROTECT)
-    question = models.ForeignKey(AppraiserQuestion, on_delete=models.PROTECT)
-    start_time = models.CharField(max_length=7)
-    end_time = models.CharField(max_length=7)
-    week_days = models.CharField(max_length=7)    
+    question = models.ForeignKey(AppraiserQuestion, on_delete=models.PROTECT)    
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

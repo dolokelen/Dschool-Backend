@@ -16,10 +16,7 @@ class QuizExam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='quizzes')
     section = models.ForeignKey(Section, on_delete=models.PROTECT, related_name='quizzes')
     question = models.ForeignKey(QuizQuestion, on_delete=models.PROTECT, related_name='quizzes')
-    selected_choice = models.ForeignKey(Choice, on_delete=models.PROTECT, related_name='selectedchoices')
-    start_time = models.CharField(max_length=7)
-    end_time = models.CharField(max_length=7)
-    week_days = models.CharField(max_length=7)    
+    selected_choice = models.ForeignKey(Choice, on_delete=models.PROTECT, related_name='selectedchoices')    
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -33,10 +30,7 @@ class AppraiserResponse(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT, related_name='appraiserresponses')
     course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='appraiserresponses')
     section = models.ForeignKey(Section, on_delete=models.PROTECT, related_name='appraiserresponses')
-    question = models.ForeignKey(AppraiserQuestion, on_delete=models.PROTECT, related_name='appraiserresponses')
-    start_time = models.CharField(max_length=7)
-    end_time = models.CharField(max_length=7)
-    week_days = models.CharField(max_length=7)    
+    question = models.ForeignKey(AppraiserQuestion, on_delete=models.PROTECT, related_name='appraiserresponses')    
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
