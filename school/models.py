@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from school.validators import validate_school_year_at_admin_site
 
 
 class AbstractStatus(models.Model):
@@ -264,7 +265,7 @@ class Scholarship(models.Model):
 
 
 class SchoolYear(models.Model):
-    year = models.PositiveIntegerField(primary_key=True)
+    year = models.PositiveIntegerField(primary_key=True, validators=[validate_school_year_at_admin_site])
 
     def __str__(self) -> str:
         return str(self.year)
