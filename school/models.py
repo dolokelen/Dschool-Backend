@@ -431,6 +431,8 @@ class Attendance(models.Model):
         ('E', 'Excuse'),
         ('T', 'Tardy')
     )
+    school_year = models.ForeignKey(SchoolYear, on_delete=models.PROTECT)
+    semester = models.ForeignKey(Semester, on_delete=models.PROTECT)
     student = models.ForeignKey(
         Student, on_delete=models.PROTECT, related_name='attendance')
     course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='attendance')
