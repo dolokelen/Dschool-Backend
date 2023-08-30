@@ -161,7 +161,7 @@ class SectionSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Attendance
-        fields = ['id', 'student', 'section', 'course', 'classroom', 'classtime']
+        fields = ['id', 'school_year', 'course', 'section', 'student', 'status', 'comment']
 
 
 

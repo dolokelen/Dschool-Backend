@@ -155,6 +155,9 @@ class SectionViewSet(ModelViewSet):
     serializer_class = serializers.SectionSerializer
 
 
+class AttendanceViewSet(ModelViewSet):
+    queryset = models.Attendance.objects.select_related('school_year', 'semester', 'course', 'student', 'section').all()
+    serializer_class = serializers.AttendanceSerializer
 
 
 

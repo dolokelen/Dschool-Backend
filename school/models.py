@@ -448,10 +448,13 @@ class Attendance(models.Model):
 
 
 class SectionExam(AbstractPositiveIntegerField):
-    name = models.CharField(max_length=200, unique=True, help_text='Exam name')
+    school_year = models.ForeignKey(SchoolYear, on_delete=models.PROTECT)
+    semester = models.ForeignKey(Semester, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='exams')
+    sections = models.ManyToManyField(Section, related_name='exams')
     classroom = models.ForeignKey(
         ClassRoom, on_delete=models.PROTECT, related_name='exams')
-    sections = models.ManyToManyField(Section, related_name='exams')
+    name = models.CharField(max_length=200, unique=True, help_text='Exam name')
 
     class Meta:
         unique_together = [['classroom', 'start_hour',
