@@ -66,3 +66,99 @@ class EmployeeViewSet(ModelViewSet):
 class TeacherViewSet(ModelViewSet):
     queryset = models.Teacher.objects.select_related('department', 'office', 'person', 'supervisor').all()
     serializer_class = serializers.TeacherSerializer
+
+
+class StudentViewSet(ModelViewSet):
+    queryset = models.Student.objects.select_related('department', 'major', 'person', 'supervisor')\
+        .prefetch_related('studentparent_set', 'medicals', 'scholarships').all()
+    serializer_class = serializers.StudentSerializer
+
+
+class MajorViewSet(ModelViewSet):
+    queryset = models.Major.objects.select_related('department').all()
+    serializer_class = serializers.MajorSerializer
+
+
+class StudentParentViewSet(ModelViewSet):
+    queryset = models.StudentParent.objects.select_related('student').all()
+    serializer_class = serializers.StudentParentSerializer
+
+
+class MedicalViewSet(ModelViewSet):
+    queryset = models.Medical.objects.select_related('student').all()
+    serializer_class = serializers.MedicalSerializer
+
+
+class ScholarshipViewSet(ModelViewSet):
+    queryset = models.Medical.objects.select_related('student').all()
+    serializer_class = serializers.ScholarshipSerializer
+
+
+class SchoolYearViewSet(ModelViewSet):
+    queryset = models.SchoolYear.objects.all()
+    serializer_class = serializers.SchoolYearSerializer
+
+
+class CatalogViewSet(ModelViewSet):
+    queryset = models.Catalog.objects.all()
+    serializer_class = serializers.CatalogSerializer
+
+
+class TextBookViewSet(ModelViewSet):
+    queryset = models.TextBook.objects.select_related('catalog').all()
+    serializer_class = serializers.TextBookSerializer
+
+
+class CourseViewSet(ModelViewSet):
+    queryset = models.Course.objects.select_related('prerequisite').prefetch_related('books').all()
+    serializer_class = serializers.CourseSerializer
+
+
+class SemesterExamViewSet(ModelViewSet):
+    queryset = models.SemesterExam.objects.all()
+    serializer_class = serializers.SemesterExamSerializer
+
+
+class EventViewSet(ModelViewSet):
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventSerializer
+
+
+class SemesterViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'option']
+    queryset = models.Semester.objects.select_related('school_year')\
+        .prefetch_related('courses', 'conducted_exams', 'events').all()
+    serializer_class = serializers.SemesterSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return serializers.UpdateSemesterSerializer
+        return serializers.SemesterSerializer
+    
+
+class SemesterEventViewSet(ModelViewSet):
+    queryset = models.SemesterEvent.objects.select_related('semester', 'event').all()
+    serializer_class = serializers.SemesterEventSerializer
+        
+
+class ClassRoomViewSet(ModelViewSet):
+    queryset = models.ClassRoom.objects.select_related('building').all()
+    serializer_class = serializers.ClassRoomSerializer
+
+class ClassTimeViewSet(ModelViewSet):
+    queryset = models.ClassTime.objects.all()
+    serializer_class = serializers.ClassTimeSerializer
+
+
+class SectionViewSet(ModelViewSet):
+    queryset = models.Section.objects.select_related('course', 'classroom', 'classtime').all()
+    serializer_class = serializers.SectionSerializer
+
+
+
+
+
+
+
+
+

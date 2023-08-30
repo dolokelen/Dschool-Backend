@@ -433,6 +433,7 @@ class Attendance(models.Model):
     )
     student = models.ForeignKey(
         Student, on_delete=models.PROTECT, related_name='attendance')
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='attendance')
     section = models.ForeignKey(
         Section, on_delete=models.PROTECT, related_name='attendance')
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
