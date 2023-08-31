@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.contenttypes.models import ContentType
 from . import models
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -161,7 +162,86 @@ class SectionSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Attendance
-        fields = ['id', 'school_year', 'course', 'section', 'student', 'status', 'comment']
+        fields = ['id', 'school_year', 'semester', 'course', 'section', 'student', 'status', 'comment']
+
+
+class SectionExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SectionExam
+        fields = ['id', 'school_year', 'semester', 'course', 'sections', 
+                  'classroom', 'name', 'start_hour', 'start_minute', 
+                  'end_hour', 'end_minute', 'week_days']
+        
+
+class TeachSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Teach
+        fields = ['id', 'school_year', 'semester', 'teacher', 'course', 'section']
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Enrollment
+        fields = ['id', 'school_year', 'semester', 'student', 'course', 'section', 'status']
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Enrollment
+        fields = ['id', 'school_year', 'semester', 'student', 'course', 'section', 'status']
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Grade
+        fields = ['id', 'school_year', 'semester', 'student', 'course', 
+                  'section', 'attendance', 'quiz', 'assignment', 'midterm', 'project', 'final']
+
+
+class SupplyCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SupplyCategory
+        fields = ['id', 'title']
+
+
+class SupplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Supply
+        fields = ['id', 'supply_category', 'name', 'quantity', 'unit_price', 'comment']
+
+
+class SupplyItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SupplyItem
+        fields = ['id', 'supply', 'content_type', 'object_id', 'quantity']
+
+
+class SupplyItemSerializer(serializers.ModelSerializer):
+    content_object = serializers.SerializerMethodField()
+    content_type = serializers.PrimaryKeyRelatedField(queryset=ContentType.objects.filter(
+        app_label='school',  # Replace with the actual app label of your models
+        model__in=['department', 'building']  # Replace with the lowercase model names
+    ))
+
+    class Meta:
+        model = models.SupplyItem
+        fields = ['id', 'supply', 'content_type', 'object_id', 'content_object', 'quantity']
+    
+    def get_content_object(self, obj):
+        content_type = obj.content_type
+        model = content_type.model_class()
+
+        serializer_mapping = {
+            models.Department: DepartmentSerializer,
+            models.Building: BuildingSerializer,
+        }
+
+        serializer_class = serializer_mapping.get(model, None)
+
+        if serializer_class:
+            serializer = serializer_class()
+            return serializer(obj.content_object, context=self.context).data
+        else:
+            return None  # Handle the case where the model is not mapped
+   
 
 
 

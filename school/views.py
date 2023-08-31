@@ -160,8 +160,38 @@ class AttendanceViewSet(ModelViewSet):
     serializer_class = serializers.AttendanceSerializer
 
 
+class SectionExamViewSet(ModelViewSet):
+    queryset = models.SectionExam.objects.select_related('school_year', 'semester', 'course', 'classroom')\
+        .prefetch_related('sections').all()
+    serializer_class = serializers.SectionExamSerializer
 
 
+class TeachViewSet(ModelViewSet):
+    queryset = models.Teach.objects.select_related('school_year', 'semester', 'teacher', 'course', 'section').all()
+    serializer_class = serializers.TeachSerializer
 
 
+class EnrollmentViewSet(ModelViewSet):
+    queryset = models.Enrollment.objects.select_related('school_year', 'semester', 'student', 'course', 'section').all()
+    serializer_class = serializers.EnrollmentSerializer
+
+
+class GradeViewSet(ModelViewSet):
+    queryset = models.Grade.objects.select_related('school_year', 'semester', 'student', 'course', 'section').all()
+    serializer_class = serializers.GradeSerializer
+
+
+class SupplyCategoryViewSet(ModelViewSet):
+    queryset = models.SupplyCategory.objects.all()
+    serializer_class = serializers.SupplyCategorySerializer
+
+
+class SupplyViewSet(ModelViewSet):
+    queryset = models.Supply.objects.select_related('supply_category').all()
+    serializer_class = serializers.SupplySerializer
+
+
+# class SupplyItemViewSet(ModelViewSet):
+#     queryset = models.SupplyItem.objects.select_related('supply').all()
+#     serializer_class = serializers.SupplyItemSerializer
 

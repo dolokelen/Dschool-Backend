@@ -26,6 +26,13 @@ router.register('class-rooms', views.ClassRoomViewSet)
 router.register('class-times', views.ClassTimeViewSet)
 router.register('sections', views.SectionViewSet)
 router.register('attendances', views.AttendanceViewSet)
+router.register('section-exams', views.SectionExamViewSet)
+router.register('teaches', views.TeachViewSet)
+router.register('enrollments', views.EnrollmentViewSet)
+router.register('grades', views.GradeViewSet)
+router.register('supply-categories', views.SupplyCategoryViewSet)
+router.register('supplies', views.SupplyViewSet)
+# router.register('supply-items', views.SupplyItemViewSet)
 
 urlpatterns = router.urls
 # urlpatterns = [
