@@ -215,32 +215,32 @@ class SupplyItemSerializer(serializers.ModelSerializer):
 
 
 class SupplyItemSerializer(serializers.ModelSerializer):
-    content_object = serializers.SerializerMethodField()
-    content_type = serializers.PrimaryKeyRelatedField(queryset=ContentType.objects.filter(
-        app_label='school',  # Replace with the actual app label of your models
-        model__in=['department', 'building']  # Replace with the lowercase model names
-    ))
+    # content_object = serializers.SerializerMethodField()
+    # content_type = serializers.PrimaryKeyRelatedField(queryset=ContentType.objects.filter(
+    #     app_label='school',  # Replace with the actual app label of your models
+    #     model__in=['department', 'building']  # Replace with the lowercase model names
+    # ))
 
     class Meta:
         model = models.SupplyItem
-        fields = ['id', 'supply', 'content_type', 'object_id', 'content_object', 'quantity']
+        fields = ['id', 'supply', 'quantity']
     
-    def get_content_object(self, obj):
-        content_type = obj.content_type
-        model = content_type.model_class()
+    # def get_content_object(self, obj):
+    #     content_type = obj.content_type
+    #     model = content_type.model_class()
 
-        serializer_mapping = {
-            models.Department: DepartmentSerializer,
-            models.Building: BuildingSerializer,
-        }
+    #     serializer_mapping = {
+    #         models.Department: DepartmentSerializer,
+    #         models.Building: BuildingSerializer,
+    #     }
 
-        serializer_class = serializer_mapping.get(model, None)
+    #     serializer_class = serializer_mapping.get(model, None)
 
-        if serializer_class:
-            serializer = serializer_class()
-            return serializer(obj.content_object, context=self.context).data
-        else:
-            return None  # Handle the case where the model is not mapped
+    #     if serializer_class:
+    #         serializer = serializer_class()
+    #         return serializer(obj.content_object, context=self.context).data
+    #     else:
+    #         return None  # Handle the case where the model is not mapped
    
 
 

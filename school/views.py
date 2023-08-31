@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -191,7 +192,9 @@ class SupplyViewSet(ModelViewSet):
     serializer_class = serializers.SupplySerializer
 
 
-# class SupplyItemViewSet(ModelViewSet):
-#     queryset = models.SupplyItem.objects.select_related('supply').all()
-#     serializer_class = serializers.SupplyItemSerializer
+class SupplyItemViewSet(ModelViewSet):
+    content_type = ContentType.objects.get_for_model(models.Department)
+    supply_item = models.SupplyItem.objects.select_related('supply').filter(content_type=content_type, object_id=1)
+    queryset = supply_item
+    serializer_class = serializers.SupplyItemSerializer
 
