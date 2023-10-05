@@ -12,7 +12,7 @@ from . import filters
 
 
 class DepartmentViewset(ModelViewSet):
-    permission_classes = [FullDjangoModelPermissions]
+    # permission_classes = [FullDjangoModelPermissions]
     serializer_class = serializers.DepartmentSerializer
     queryset = models.Department.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -22,13 +22,13 @@ class DepartmentViewset(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         if models.Employee.objects.filter(department_id=self.kwargs['pk']).count() > 0:
-            return Response({'error': 'Department cannot be deleted because it cantains employee(s).'}, 
+            return Response({'error': 'Department cannot be deleted because it cantains employee(s).'},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         elif models.Teacher.objects.filter(department_id=self.kwargs['pk']).count() > 0:
-            return Response({'error': 'Department cannot be deleted because it contains teacher(s)'}, 
+            return Response({'error': 'Department cannot be deleted because it contains teacher(s)'},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         elif models.Student.objects.filter(department_id=self.kwargs['pk']).count() > 0:
-            return Response({'error': 'Department cannot be deleted because it contains student(s)'}, 
+            return Response({'error': 'Department cannot be deleted because it contains student(s)'},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super().destroy(request, *args, **kwargs)
 
@@ -38,19 +38,19 @@ class BuildingViewSet(ModelViewSet):
     serializer_class = serializers.BuildingSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.BuildingFilter
-    
+
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAdminUser()]
         return [FullDjangoModelPermissions()]
-    
+
     def destroy(self, request, *args, **kwargs):
         if models.Office.objects.filter(department_id=self.kwargs['pk']).count() > 0:
             return Response({'error': 'Building cannot be deleted because it is associated with office(s)'})
         elif models.ClassRoom.objects.filter(department_id=self.kwargs['pk']).count() > 0:
             return Response({'error': 'Building cannot be deleted because it is associated with classroom(s)'})
         return super().destroy(request, *args, **kwargs)
-    
+
 
 class OfficeViewSet(ModelViewSet):
     queryset = models.Office.objects.select_related('building').all()
@@ -60,12 +60,14 @@ class OfficeViewSet(ModelViewSet):
 
 
 class EmployeeViewSet(ModelViewSet):
-    queryset = models.Employee.objects.select_related('department', 'office', 'person', 'supervisor').all()
+    queryset = models.Employee.objects.select_related(
+        'department', 'office', 'person', 'supervisor').all()
     serializer_class = serializers.EmployeeSerializer
 
 
 class TeacherViewSet(ModelViewSet):
-    queryset = models.Teacher.objects.select_related('department', 'office', 'person', 'supervisor').all()
+    queryset = models.Teacher.objects.select_related(
+        'department', 'office', 'person', 'supervisor').all()
     serializer_class = serializers.TeacherSerializer
 
 
@@ -101,7 +103,7 @@ class SchoolYearViewSet(ModelViewSet):
 
 
 class CatalogViewSet(ModelViewSet):
-    queryset = models.Catalog.objects.all()
+    queryset = models.Catalog.objects.order_by('title')
     serializer_class = serializers.CatalogSerializer
 
 
@@ -111,7 +113,8 @@ class TextBookViewSet(ModelViewSet):
 
 
 class CourseViewSet(ModelViewSet):
-    queryset = models.Course.objects.select_related('prerequisite').prefetch_related('books').all()
+    queryset = models.Course.objects.select_related(
+        'prerequisite').prefetch_related('books').all()
     serializer_class = serializers.CourseSerializer
 
 
@@ -135,16 +138,18 @@ class SemesterViewSet(ModelViewSet):
         if self.request.method == 'PATCH':
             return serializers.UpdateSemesterSerializer
         return serializers.SemesterSerializer
-    
+
 
 class SemesterEventViewSet(ModelViewSet):
-    queryset = models.SemesterEvent.objects.select_related('semester', 'event').all()
+    queryset = models.SemesterEvent.objects.select_related(
+        'semester', 'event').all()
     serializer_class = serializers.SemesterEventSerializer
-        
+
 
 class ClassRoomViewSet(ModelViewSet):
     queryset = models.ClassRoom.objects.select_related('building').all()
     serializer_class = serializers.ClassRoomSerializer
+
 
 class ClassTimeViewSet(ModelViewSet):
     queryset = models.ClassTime.objects.all()
@@ -152,12 +157,14 @@ class ClassTimeViewSet(ModelViewSet):
 
 
 class SectionViewSet(ModelViewSet):
-    queryset = models.Section.objects.select_related('course', 'classroom', 'classtime').all()
+    queryset = models.Section.objects.select_related(
+        'course', 'classroom', 'classtime').all()
     serializer_class = serializers.SectionSerializer
 
 
 class AttendanceViewSet(ModelViewSet):
-    queryset = models.Attendance.objects.select_related('school_year', 'semester', 'course', 'student', 'section').all()
+    queryset = models.Attendance.objects.select_related(
+        'school_year', 'semester', 'course', 'student', 'section').all()
     serializer_class = serializers.AttendanceSerializer
 
 
@@ -168,17 +175,20 @@ class SectionExamViewSet(ModelViewSet):
 
 
 class TeachViewSet(ModelViewSet):
-    queryset = models.Teach.objects.select_related('school_year', 'semester', 'teacher', 'course', 'section').all()
+    queryset = models.Teach.objects.select_related(
+        'school_year', 'semester', 'teacher', 'course', 'section').all()
     serializer_class = serializers.TeachSerializer
 
 
 class EnrollmentViewSet(ModelViewSet):
-    queryset = models.Enrollment.objects.select_related('school_year', 'semester', 'student', 'course', 'section').all()
+    queryset = models.Enrollment.objects.select_related(
+        'school_year', 'semester', 'student', 'course', 'section').all()
     serializer_class = serializers.EnrollmentSerializer
 
 
 class GradeViewSet(ModelViewSet):
-    queryset = models.Grade.objects.select_related('school_year', 'semester', 'student', 'course', 'section').all()
+    queryset = models.Grade.objects.select_related(
+        'school_year', 'semester', 'student', 'course', 'section').all()
     serializer_class = serializers.GradeSerializer
 
 
@@ -194,7 +204,7 @@ class SupplyViewSet(ModelViewSet):
 
 class SupplyItemViewSet(ModelViewSet):
     content_type = ContentType.objects.get_for_model(models.Department)
-    supply_item = models.SupplyItem.objects.select_related('supply').filter(content_type=content_type, object_id=1)
+    supply_item = models.SupplyItem.objects.select_related(
+        'supply').filter(content_type=content_type, object_id=1)
     queryset = supply_item
     serializer_class = serializers.SupplyItemSerializer
-

@@ -418,7 +418,7 @@ class Section(models.Model):
         ClassTime, on_delete=models.PROTECT, related_name='sections')
 
     class Meta:
-        unique_together = [['classroom', 'classtime']]
+        unique_together = [['classroom', 'classtime'], ['name', 'course']]
 
     def __str__(self) -> str:
         return str(self.name)
